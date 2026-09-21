@@ -1,0 +1,938 @@
+<title>Storefront Styling Guide</title>
+<meta name="description" content="A no-code, click-by-click guide to customizing an Ocean Depths storefront on Everfront.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap');
+
+  :root{
+    --bg: #070b18;
+    --surface: #0c1226;
+    --panel: #0f1528;
+    --panel-2: #111a33;
+    --border: #1e2c45;
+    --border-soft: #182238;
+    --text: #e7ecf7;
+    --text-dim: #aab6cf;
+    --muted: #7d8da8;
+    --accent: #38bdf8;
+    --accent-2: #7dd3fc;
+    --gold: #d4a84b;
+    --good: #34d399;
+    --radius: 12px;
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Manrope', system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-weight: 700;
+    line-height: 1.2;
+    text-wrap: balance;
+    margin: 0;
+    color: var(--text);
+  }
+  code, .mono{ font-family: 'JetBrains Mono', monospace; }
+  a{ color: var(--accent-2); }
+  img{max-width:100%;}
+
+  /* ---------- layout shell ---------- */
+  .shell{
+    display:flex;
+    min-height:100%;
+    max-width:1280px;
+    margin-inline:auto;
+  }
+  .sidebar{
+    width: 260px;
+    flex-shrink:0;
+    padding: 28px 18px 40px;
+    position: sticky;
+    top: 0;
+    align-self:flex-start;
+    max-height: 100vh;
+    overflow-y:auto;
+    border-right: 1px solid var(--border-soft);
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    padding: 4px 10px 22px;
+    border-bottom: 1px solid var(--border-soft);
+    margin-bottom: 18px;
+  }
+  .brand .mark{
+    width:30px; height:30px; border-radius:8px;
+    background: linear-gradient(155deg, var(--accent) 0%, #1b4b73 100%);
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px;
+  }
+  .brand .name{ font-family:'Outfit'; font-weight:700; font-size:15px; }
+  .brand .name small{ display:block; font-family:'Manrope'; font-weight:500; font-size:11px; color:var(--muted); letter-spacing:.02em; }
+
+  nav.toc{ display:flex; flex-direction:column; gap:2px; }
+  nav.toc .group-label{
+    font-size:11px; text-transform:uppercase; letter-spacing:.08em;
+    color: var(--muted); font-weight:700; margin: 16px 10px 6px;
+  }
+  nav.toc a{
+    padding: 7px 10px; border-radius:8px; font-size:13.5px;
+    color: var(--text-dim); text-decoration:none; font-weight:600;
+    display:flex; align-items:center; gap:9px;
+  }
+  nav.toc a:hover{ background: var(--panel); color: var(--text); }
+  nav.toc a .n{
+    width:18px; height:18px; border-radius:5px; background:var(--panel-2);
+    border:1px solid var(--border); color:var(--muted);
+    font-family:'JetBrains Mono'; font-size:10px; font-weight:500;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+
+  main{ flex:1; min-width:0; padding: 44px clamp(20px,4vw,56px) 90px; }
+
+  /* ---------- hero ---------- */
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+    color: var(--accent-2); background: rgba(56,189,248,.08);
+    border:1px solid rgba(56,189,248,.25); padding:5px 12px; border-radius:999px;
+    margin-bottom:18px;
+  }
+  .page-hero h1{ font-size: clamp(30px,4.2vw,44px); max-width: 820px; }
+  .page-hero p.lead{
+    font-size:16.5px; color: var(--text-dim); max-width: 640px; margin-top:14px;
+  }
+  .hero-badges{ display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
+  .hero-badge{
+    display:flex; align-items:center; gap:8px;
+    background: var(--panel); border:1px solid var(--border);
+    padding:9px 14px; border-radius:10px; font-size:13px; color:var(--text-dim); font-weight:600;
+  }
+  .hero-badge .dot{ width:7px;height:7px;border-radius:50%; background: var(--good); box-shadow:0 0 0 3px rgba(52,211,153,.15); }
+
+  hr.div{ border:none; border-top:1px solid var(--border-soft); margin: 48px 0; }
+
+  /* ---------- callout ---------- */
+  .callout{
+    display:flex; gap:12px; padding: 16px 18px; border-radius: var(--radius);
+    border:1px solid var(--border); background: var(--panel); margin: 22px 0;
+  }
+  .callout.info{ border-color: rgba(56,189,248,.3); background: rgba(56,189,248,.06); }
+  .callout.warn{ border-color: rgba(212,168,75,.35); background: rgba(212,168,75,.07); }
+  .callout .icon{ font-size:17px; line-height:1.4; flex-shrink:0; }
+  .callout .body b{ color:var(--text); }
+  .callout .body{ font-size:14px; color: var(--text-dim); }
+
+  /* ---------- section / steps ---------- */
+  section.block{ padding-top: 8px; scroll-margin-top: 24px; }
+  .block-head{ display:flex; align-items:baseline; gap:12px; margin-bottom: 6px; }
+  .block-head .idx{
+    font-family:'JetBrains Mono'; font-size:13px; color: var(--accent-2); font-weight:600;
+  }
+  .block-head h2{ font-size: clamp(22px,2.6vw,28px); }
+  .block-sub{ color: var(--text-dim); font-size:15px; max-width: 640px; margin-top:8px; margin-bottom: 26px;}
+
+  .step{
+    display:grid; grid-template-columns: 30px 1fr; gap: 14px;
+    padding: 18px 0; border-top: 1px solid var(--border-soft);
+  }
+  .step:first-of-type{ border-top:none; }
+  .step .num{
+    width:30px; height:30px; border-radius:9px;
+    background: var(--panel-2); border:1px solid var(--border);
+    color: var(--accent-2); font-family:'JetBrains Mono'; font-weight:600; font-size:13px;
+    display:flex; align-items:center; justify-content:center; margin-top:2px;
+  }
+  .step h3{ font-size:16px; margin-bottom:5px; }
+  .step p{ margin:0; color: var(--text-dim); font-size:14.5px; }
+  .step p + p{ margin-top:8px; }
+  .step .path{
+    display:inline-flex; align-items:center; gap:6px; flex-wrap:wrap;
+    margin-top:9px; font-size:12.5px;
+  }
+  .crumb{
+    font-family:'JetBrains Mono'; background:var(--panel-2); border:1px solid var(--border);
+    color: var(--text-dim); padding:3px 8px; border-radius:6px;
+  }
+  .crumb.hit{ color: var(--accent-2); border-color: rgba(56,189,248,.4); }
+  .sep{ color: var(--muted); }
+
+  /* ---------- fake dashboard mockups ---------- */
+  .frame{
+    border:1px solid var(--border); border-radius:14px; background: var(--surface);
+    overflow:hidden; margin: 22px 0 8px; box-shadow: 0 20px 50px -25px rgba(0,0,0,.6);
+  }
+  .frame-bar{
+    display:flex; align-items:center; gap:8px; padding:10px 14px;
+    background: var(--panel-2); border-bottom:1px solid var(--border);
+  }
+  .frame-bar .d{ width:9px;height:9px;border-radius:50%; background:#2a3854; }
+  .frame-bar .url{
+    margin-left:8px; font-family:'JetBrains Mono'; font-size:11.5px; color: var(--muted);
+    background: var(--panel); border:1px solid var(--border-soft); border-radius:6px; padding:3px 10px;
+  }
+  .frame-body{ padding: 18px 20px 22px; position:relative; }
+
+  .tabrow{ display:flex; gap:7px; flex-wrap:wrap; margin-bottom:18px; }
+  .tabrow .tab{
+    font-size:12.5px; font-weight:600; color: var(--text-dim);
+    background: var(--panel); border:1px solid var(--border); border-radius:8px;
+    padding:6px 11px;
+  }
+  .tabrow .tab.active{ color: var(--text); border-color: var(--accent); background: rgba(56,189,248,.08); }
+
+  .field-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:16px 18px; }
+  @media (max-width:560px){ .field-grid{ grid-template-columns: 1fr; } }
+  .field label{ display:block; font-size:12px; font-weight:700; color: var(--text-dim); margin-bottom:7px; }
+  .field .box{
+    font-family:'JetBrains Mono'; font-size:13px; color: var(--text);
+    background: var(--panel-2); border:1px solid var(--border); border-radius:8px;
+    padding:9px 12px; display:flex; align-items:center; gap:9px;
+  }
+  .swatch{ width:16px; height:16px; border-radius:4px; border:1px solid rgba(255,255,255,.2); flex-shrink:0; }
+  .field .hint{ font-size:11.5px; color: var(--muted); margin-top:6px; }
+
+  .callout-marker{
+    position:absolute; width:22px; height:22px; border-radius:50%;
+    background: var(--accent); color:#06111c; font-family:'JetBrains Mono'; font-weight:700; font-size:11.5px;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 0 0 4px rgba(56,189,248,.22);
+  }
+
+  .legend{ display:flex; flex-direction:column; gap:9px; margin-top:16px; }
+  .legend .row{ display:flex; gap:10px; font-size:13.5px; color: var(--text-dim); align-items:flex-start; }
+  .legend .row .m{
+    width:20px;height:20px;border-radius:50%; background: var(--accent); color:#06111c;
+    font-family:'JetBrains Mono'; font-weight:700; font-size:11px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+  .legend b{ color: var(--text); }
+
+  .toggle-row{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding: 11px 14px; background: var(--panel-2); border:1px solid var(--border);
+    border-radius:9px; margin-bottom:8px; font-size:13.5px; color: var(--text-dim);
+  }
+  .toggle-row b{ color:var(--text); font-weight:700; }
+  .toggle{
+    width:36px;height:20px;border-radius:999px; background: var(--accent);
+    position:relative; flex-shrink:0;
+  }
+  .toggle::after{ content:''; position:absolute; width:14px;height:14px;border-radius:50%; background:#06111c; top:3px; right:3px; }
+  .toggle.off{ background: #253352; }
+  .toggle.off::after{ background:#8a97b3; right:auto; left:3px; }
+
+  .widget-item{
+    display:flex; align-items:center; gap:12px; padding:11px 12px;
+    border:1px solid var(--border); background: var(--panel-2); border-radius:9px; margin-bottom:8px;
+  }
+  .widget-item .grip{ color: var(--muted); font-size:14px; letter-spacing:1px; }
+  .widget-item .info b{ font-size:13.5px; color:var(--text); }
+  .widget-item .info span{ display:block; font-size:12px; color: var(--muted); margin-top:2px; }
+
+  .colorwheel{
+    width:34px;height:34px;border-radius:8px; flex-shrink:0; border:1px solid rgba(255,255,255,.15);
+  }
+
+  table.palette{ width:100%; border-collapse:collapse; margin: 18px 0; font-size:13.5px; }
+  table.palette th{
+    text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.06em;
+    color: var(--muted); padding: 0 10px 8px; font-weight:700;
+  }
+  table.palette td{ padding: 10px; border-top:1px solid var(--border-soft); vertical-align:middle; }
+  table.palette tr td:first-child{ padding-left:0; }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background: var(--accent); color:#06111c; font-weight:700; font-size:13.5px;
+    padding: 10px 16px; border-radius:9px; text-decoration:none; border:none;
+  }
+  .btn.ghost{ background:transparent; color: var(--text); border:1px solid var(--border); }
+
+  footer.page-footer{
+    border-top:1px solid var(--border-soft); margin-top: 60px; padding-top: 24px;
+    color: var(--muted); font-size:13px;
+  }
+
+  .mobile-nav-toggle{ display:none; }
+  @media (max-width: 880px){
+    .shell{ display:block; }
+    .sidebar{
+      position: sticky; top:0; z-index:20; width:auto; max-height:none;
+      border-right:none; border-bottom:1px solid var(--border-soft);
+      background: var(--bg); padding: 14px 18px;
+    }
+    .sidebar nav.toc{ display:none; }
+    .sidebar.open nav.toc{ display:flex; }
+    .mobile-nav-toggle{
+      display:flex; align-items:center; justify-content:space-between; width:100%;
+      background:none; border:none; color:var(--text); font-family:'Outfit'; font-weight:700; font-size:14px;
+      padding:6px 2px;
+    }
+    main{ padding: 34px 18px 70px; }
+  }
+</style>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="mark">🌊</div>
+      <div class="name">Ocean Depths<small>Storefront guide</small></div>
+    </div>
+    <button class="mobile-nav-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">
+      Menu <span>☰</span>
+    </button>
+    <nav class="toc">
+      <a href="#install"><span class="n">0</span> Installing the theme</a>
+      <a href="#start"><span class="n">·</span> Where everything lives</a>
+      <div class="group-label">Appearance</div>
+      <a href="#colors"><span class="n">1</span> Colors &amp; branding</a>
+      <a href="#header"><span class="n">2</span> Logo &amp; header</a>
+      <a href="#hero"><span class="n">3</span> Hero banner</a>
+      <a href="#hero-logo-code"><span class="n">·</span> — hero artwork (Code)</a>
+      <a href="#sections"><span class="n">4</span> Homepage sections</a>
+      <a href="#footer"><span class="n">5</span> Footer</a>
+      <div class="group-label">Layout</div>
+      <a href="#widgets"><span class="n">6</span> Sidebar widgets</a>
+      <a href="#pages"><span class="n">7</span> Page text</a>
+      <div class="group-label">Finishing up</div>
+      <a href="#publish"><span class="n">8</span> Preview &amp; publish</a>
+      <a href="#faq"><span class="n">?</span> Troubleshooting</a>
+    </nav>
+  </aside>
+
+  <main>
+    <div class="page-hero">
+      <div class="eyebrow">● No code required</div>
+      <h1>Customize your Ocean Depths storefront without touching a line of code</h1>
+      <p class="lead">Ocean Depths runs on Everfront's visual Design panel — the same colors, logo, banner text and homepage
+      layout you'd normally hire a developer to edit are exposed as plain fields, color pickers and on/off switches.
+      This guide walks through every one of them, in order, with exactly what to click.</p>
+      <div class="hero-badges">
+        <div class="hero-badge"><span class="dot"></span> Everfront Dashboard → Design</div>
+        <div class="hero-badge"><span class="dot"></span> Changes save as a draft first</div>
+        <div class="hero-badge"><span class="dot"></span> Nothing goes live until you publish</div>
+      </div>
+    </div>
+
+    <section class="block" id="install" style="margin-top:52px;">
+      <div class="block-head"><span class="idx">00</span><h2>Installing the theme</h2></div>
+      <p class="block-sub">This part happens once, before any of the styling below. Four steps: create the store,
+      make sure Ocean Depths is in your template library, assign it to the store, and connect Tebex.</p>
+
+      <div class="step">
+        <div class="num">1</div>
+        <div>
+          <h3>Create a store</h3>
+          <p>In the Everfront dashboard, click <b>New store</b> and fill in three things: a <b>Store name</b> (only
+          your team sees this — it just labels the store in the dashboard), a <b>Hostname</b> (this becomes
+          <code>yourname.everfront.store</code> — a custom domain can be attached later), and your <b>Tebex public
+          token</b>.</p>
+          <div class="callout info" style="margin-top:12px;">
+            <div class="icon">🔑</div>
+            <div class="body">Get the Tebex token from <b>Tebex Creator panel → Developers → Headless API</b>. It's
+            safe to paste here — it only grants read access to your public catalogue, never payments or account
+            access.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">2</div>
+        <div>
+          <h3>Make sure Ocean Depths is in your template library</h3>
+          <p>Templates live at the <b>workspace</b> level, separately from any one store — open the workspace menu
+          (your workspace name, top-left) → <span class="crumb hit">Themes</span>. If Ocean Depths isn't already
+          listed under <b>Your templates</b>, click <b>Import a template</b> and upload it as a ZIP (from
+          BuiltByBit, Polymart, or wherever it was purchased).</p>
+
+          <div class="frame">
+            <div class="frame-bar"><span class="d"></span><span class="d"></span><span class="d"></span>
+              <span class="url">everfront.io/dashboard/themes</span></div>
+            <div class="frame-body">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <div style="font-size:13px; color:var(--text-dim);">2 of 25 templates · 13.9 MB of 512.0 MB</div>
+                <span class="btn" style="padding:7px 13px; font-size:12.5px;">Import a template</span>
+              </div>
+              <div class="widget-item">
+                <div class="info"><b>ocean-depths-theme</b><span>43 files · 10.8 MB — no store has taken a copy yet</span></div>
+              </div>
+              <div class="widget-item">
+                <div class="info"><b>magma-forge-theme_1</b><span>31 files · 3.1 MB — 2 stores use a copy</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">3</div>
+        <div>
+          <h3>Assign it to your store</h3>
+          <p>Open the store → <span class="crumb hit">Overview</span> tab → find the <b>Template</b> row → click
+          <b>Change</b>. Pick <code>ocean-depths-theme</code> from the list and confirm.</p>
+
+          <div class="frame">
+            <div class="frame-bar"><span class="d"></span><span class="d"></span><span class="d"></span>
+              <span class="url">everfront.io/dashboard/stores/your-store?tab=overview</span></div>
+            <div class="frame-body">
+              <div style="font-size:12px; font-weight:700; color:var(--text-dim); margin-bottom:10px; text-transform:uppercase; letter-spacing:.04em;">Change this store's template</div>
+              <p style="font-size:13px; color:var(--text-dim); margin:0 0 14px;">Your store gets its own copy of
+              whichever template you pick. Its files are yours to edit, editing them changes nothing on your other
+              stores, and the template stays in your library for next time.</p>
+              <div class="tabrow">
+                <span class="tab active">ocean-depths-theme — 43 files</span>
+                <span class="tab">magma-forge-theme_1 — 31 files</span>
+              </div>
+              <div style="display:flex; gap:10px; margin-top:16px;">
+                <span class="btn" style="padding:8px 14px; font-size:12.5px;">Pick a template</span>
+                <span class="btn ghost" style="padding:8px 14px; font-size:12.5px;">Cancel</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout warn">
+            <div class="icon">⚠️</div>
+            <div class="body">This makes a fresh copy of Ocean Depths for this store. If the store already has a
+            template with edits you care about, they're not touched until you actually confirm the swap — but there's
+            no going back to the old copy afterwards, so double-check which store you're in first.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">4</div>
+        <div>
+          <h3>Confirm Tebex is connected</h3>
+          <p>Still on the <span class="crumb hit">Overview</span> tab, check the <b>Tebex</b> row — it should read
+          <b>Connected</b> with your store's name and currency underneath. This comes from the public token entered
+          in step 1; if it says otherwise, re-check the token in <b>Settings</b>.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">5</div>
+        <div>
+          <h3>Set the store logo &amp; tab icon (optional, one-time)</h3>
+          <p>Also on <span class="crumb hit">Overview</span>, under <b>Logo and tab icon</b> — this is separate from
+          anything in the Design panel. <b>Logo</b> is a fallback used wherever the template calls for the store
+          logo generically (left blank, it borrows your Tebex account logo). <b>Browser tab icon</b> becomes your
+          favicon — upload anything and Everfront pads it into a 64×64 PNG automatically.</p>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <div class="icon">✅</div>
+        <div class="body">That's installation done. From here, everything else in this guide — colors, hero banner,
+        homepage sections, widgets, footer — happens under the store's <span class="crumb">Design</span> tab.</div>
+      </div>
+    </section>
+
+    <hr class="div">
+
+    <section class="block" id="start" style="margin-top:8px;">
+      <div class="block-head"><span class="idx">Start here</span><h2>Where everything lives</h2></div>
+      <p class="block-sub">Every setting in this guide is in the same place. Get here once and you can find any of the
+      sections below in a few clicks.</p>
+
+      <div class="step">
+        <div class="num">1</div>
+        <div>
+          <h3>Open your store in Everfront</h3>
+          <p>Go to <span class="crumb">everfront.io</span> → <b>Dashboard</b>, then click your store's name from the
+          Stores list.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div>
+          <h3>Click the "Design" tab</h3>
+          <p>At the top of the store page you'll see four tabs: <span class="crumb">Overview</span>
+          <span class="crumb hit">Design</span> <span class="crumb">Code</span> <span class="crumb">Settings</span>.
+          Click <b>Design</b> — that's the no-code panel this whole guide uses. (Ignore <b>Code</b>; that's raw
+          HTML/CSS for developers only.)</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <div>
+          <h3>Pick a sub-tab</h3>
+          <p>Inside Design there are three sub-tabs: <b>Appearance</b> (colors, logo, banner, sections — most of this
+          guide), <b>Widgets</b> (the sidebar), and <b>Pages</b> (the written text on your homepage). Each section
+          below tells you which one to click.</p>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <div class="icon">💡</div>
+        <div class="body"><b>Every field updates a live preview.</b> Nothing you type or click here affects the real
+        store until you press <b>Publish</b> — see <a href="#publish">step 8</a>. Feel free to experiment.</div>
+      </div>
+    </section>
+
+    <hr class="div">
+
+    <!-- 1. COLORS -->
+    <section class="block" id="colors">
+      <div class="block-head"><span class="idx">01</span><h2>Colors &amp; branding</h2></div>
+      <p class="block-sub"><span class="crumb">Design</span><span class="sep">→</span><span class="crumb">Appearance</span><span class="sep">→</span><span class="crumb hit">Colors</span> — eight color swatches control the entire site's palette. Change these and every button, card and background updates automatically, everywhere.</p>
+
+      <div class="frame">
+        <div class="frame-bar"><span class="d"></span><span class="d"></span><span class="d"></span>
+          <span class="url">everfront.io/dashboard/your-store/design</span>
+        </div>
+        <div class="frame-body">
+          <div class="tabrow">
+            <span class="tab">General</span><span class="tab active">Colors</span><span class="tab">Header</span>
+            <span class="tab">Hero Section</span><span class="tab">Server Status</span><span class="tab">Sections</span><span class="tab">Footer</span>
+          </div>
+          <div class="field-grid">
+            <div class="field"><label>Background Color</label>
+              <div class="box"><span class="swatch" style="background:#06091a"></span>#06091a</div>
+              <div class="hint">Main page background</div></div>
+            <div class="field"><label>Surface Color</label>
+              <div class="box"><span class="swatch" style="background:#0b1020"></span>#0b1020</div>
+              <div class="hint">Background for sections</div></div>
+            <div class="field"><label>Card Background</label>
+              <div class="box"><span class="swatch" style="background:#0f1528"></span>#0f1528</div>
+              <div class="hint">Product cards &amp; panels</div></div>
+            <div class="field"><label>Border Color</label>
+              <div class="box"><span class="swatch" style="background:#1e2c45"></span>#1e2c45</div>
+              <div class="hint">Card borders &amp; dividers</div></div>
+            <div class="field"><label>Primary Accent <span style="color:var(--accent-2)">①</span></label>
+              <div class="box"><span class="swatch" style="background:#38bdf8"></span>#38bdf8</div>
+              <div class="hint">Buttons, links, highlights</div></div>
+            <div class="field"><label>Gold Accent</label>
+              <div class="box"><span class="swatch" style="background:#d4a84b"></span>#d4a84b</div>
+              <div class="hint">Badges &amp; special elements</div></div>
+            <div class="field"><label>Text Color</label>
+              <div class="box"><span class="swatch" style="background:#e2e8f5"></span>#e2e8f5</div>
+              <div class="hint">Main text</div></div>
+            <div class="field"><label>Muted Text Color</label>
+              <div class="box"><span class="swatch" style="background:#7d8da8"></span>#7d8da8</div>
+              <div class="hint">Secondary text</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <div class="row"><span class="m">①</span><span><b>Primary Accent is the one field that matters most.</b>
+        It's the color used for every "Buy", "Add to Basket" and "View Store" button, plus all links. Changing just
+        this one swatch is often enough to make the theme feel like a completely different color scheme
+        (blue → green, orange, purple, whatever matches your server).</span></div>
+      </div>
+
+      <div class="step">
+        <div class="num">1</div>
+        <div><h3>Click a color swatch</h3>
+        <p>Click the small colored square next to any field. A color picker opens — drag to pick a shade, or type a
+        hex code (like <code>#ff6a2b</code>) directly into the text box next to it if you already have one.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div><h3>Watch the preview update</h3>
+        <p>The store preview (Overview tab, or the <b>Preview draft</b> button at the bottom of the page) reflects
+        your new colors immediately — no need to save first.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <div><h3>Keep contrast in mind</h3>
+        <p>Text Color should stay light if Background Color is dark (and vice-versa). If in doubt, only change
+        <b>Primary Accent</b> and <b>Gold Accent</b> and leave the rest as-is — that's the safest way to re-brand
+        without anything becoming hard to read.</p></div>
+      </div>
+    </section>
+
+    <hr class="div">
+
+    <!-- 2. HEADER -->
+    <section class="block" id="header">
+      <div class="block-head"><span class="idx">02</span><h2>Logo &amp; header</h2></div>
+      <p class="block-sub"><span class="crumb">Design</span><span class="sep">→</span><span class="crumb">Appearance</span><span class="sep">→</span><span class="crumb hit">Header</span> — your logo image and the top navigation bar.</p>
+
+      <div class="frame">
+        <div class="frame-bar"><span class="d"></span><span class="d"></span><span class="d"></span>
+          <span class="url">everfront.io/dashboard/your-store/design</span></div>
+        <div class="frame-body">
+          <div class="tabrow">
+            <span class="tab">General</span><span class="tab">Colors</span><span class="tab active">Header</span>
+            <span class="tab">Hero Section</span><span class="tab">Server Status</span><span class="tab">Sections</span><span class="tab">Footer</span>
+          </div>
+          <div class="field-grid">
+            <div class="field"><label>Header Logo</label>
+              <div class="box" style="color:var(--muted)">https://…/image.png</div>
+              <div class="hint">Recommended: 160×40px, PNG with transparency</div></div>
+            <div class="field"><label>Discord URL</label>
+              <div class="box">https://discord.gg/example</div>
+              <div class="hint">Shown as a button in the header</div></div>
+            <div class="field"><label>Sticky Header</label>
+              <div class="box">Yes (Recommended)</div>
+              <div class="hint">Keeps the header visible while scrolling</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">1</div>
+        <div><h3>Upload your logo</h3>
+        <p>Click <b>Upload an image</b> under Header Logo and choose the file from your computer — or paste a direct
+        image URL into the field instead. A transparent PNG around 160×40px looks best; the header will scale it to
+        fit automatically.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div><h3>Set your Discord invite</h3>
+        <p>Paste your server's invite link (e.g. <code>discord.gg/yourserver</code>) into <b>Discord URL</b>. This
+        powers the Discord button shown in the top-right of every page.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <div><h3>Decide on Sticky Header</h3>
+        <p>Leave this on <b>Yes</b> unless you have a reason not to — it keeps navigation and the basket icon reachable
+        as customers scroll down long pages.</p></div>
+      </div>
+    </section>
+
+    <hr class="div">
+
+    <!-- 3. HERO -->
+    <section class="block" id="hero">
+      <div class="block-head"><span class="idx">03</span><h2>Hero banner</h2></div>
+      <p class="block-sub"><span class="crumb">Design</span><span class="sep">→</span><span class="crumb">Appearance</span><span class="sep">→</span><span class="crumb hit">Hero Section</span> — the big banner at the very top of your homepage: your wordmark and the two call-to-action buttons underneath it.</p>
+
+      <div class="frame">
+        <div class="frame-bar"><span class="d"></span><span class="d"></span><span class="d"></span>
+          <span class="url">everfront.io/dashboard/your-store/design</span></div>
+        <div class="frame-body">
+          <div class="tabrow">
+            <span class="tab">General</span><span class="tab">Colors</span><span class="tab">Header</span>
+            <span class="tab active">Hero Section</span><span class="tab">Server Status</span><span class="tab">Sections</span><span class="tab">Footer</span>
+          </div>
+          <div class="field-grid">
+            <div class="field"><label>Show Hero</label><div class="box">Yes</div>
+              <div class="hint">Turns the whole banner on or off</div></div>
+            <div class="field"><label>Logo — Line 1 (Large)</label><div class="box">OCEAN</div>
+              <div class="hint">Big wordmark — usually your server's name</div></div>
+            <div class="field"><label>Logo — Line 2 (Subtitle)</label><div class="box">REALMS</div>
+              <div class="hint">Smaller line underneath</div></div>
+            <div class="field"><label>Primary Button Text</label><div class="box">VIEW STORES</div>
+              <div class="hint">Main call-to-action button</div></div>
+            <div class="field"><label>Secondary Button Text</label><div class="box">DISCORD</div>
+              <div class="hint">Second button, next to the first</div></div>
+            <div class="field"><label>Secondary Button URL</label><div class="box">https://discord.gg/example</div>
+              <div class="hint">Where the second button links to</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <div class="icon">⚠️</div>
+        <div class="body"><b>Logo — Line 1 / Line 2 do not change what you actually see.</b> The big "OCEAN REALMS"
+        artwork in the banner is a single illustrated image file, not text — those two fields only fill in its
+        invisible screen-reader description. To change the artwork itself, you have to go through the
+        <span class="crumb">Code</span> tab — see <a href="#hero-logo-code">the box below</a>.</div>
+      </div>
+
+      <div class="step">
+        <div class="num">1</div>
+        <div><h3>Set Logo — Line 1 / Line 2 anyway</h3>
+        <p>Even though they don't touch the visible artwork, still fill these in — they become the image's
+        accessibility text (what screen readers announce, and what search engines index), so they should match
+        whatever your logo artwork actually says.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div><h3>Edit the two buttons</h3>
+        <p><b>Primary Button Text</b> is the main button (usually links to your store — this one is fixed to your
+        packages). <b>Secondary Button Text</b> + <b>Secondary Button URL</b> is a second button you fully control —
+        point it at Discord, a website, a wiki, anything.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <div><h3>Hiding the banner entirely</h3>
+        <p>If you'd rather the homepage jump straight into products, set <b>Show Hero</b> to <b>No</b>. This is
+        reversible any time.</p></div>
+      </div>
+
+      <div id="hero-logo-code" style="margin-top:34px; padding-top:6px; scroll-margin-top:24px;">
+        <h3 style="font-size:18px; margin-bottom:8px;">Changing the actual hero artwork (Code tab)</h3>
+        <p style="color:var(--text-dim); font-size:14.5px; max-width:640px; margin:0 0 16px;">The banner's
+        "OCEAN REALMS" wordmark is a pre-made illustration, not live text, so it has to be swapped as a file. Here's
+        exactly where it lives in the theme's source, opened from the store's
+        <span class="crumb hit">Code</span> tab (not Design — this one needs the code editor):</p>
+
+        <div class="frame">
+          <div class="frame-bar"><span class="d"></span><span class="d"></span><span class="d"></span>
+            <span class="url">everfront.io/dashboard/stores/60?tab=code&amp;path=webstore/index.html</span></div>
+          <div class="frame-body" style="padding:0;">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--border);">
+              <div style="font-size:13px; color:var(--text-dim);"><b style="color:var(--text)">webstore/index.html</b> · 23,656 bytes</div>
+              <div style="display:flex; gap:8px;">
+                <span class="crumb">Preview</span><span class="crumb">Open</span>
+              </div>
+            </div>
+            <div style="display:flex; font-family:'JetBrains Mono'; font-size:12.5px; line-height:1.7; padding:14px 0;">
+              <div style="width:38px; text-align:right; padding-right:14px; color:#3c4c6e; user-select:none; flex-shrink:0;">
+                108<br>109<br>110<br>111<br>112<br>113<br>114
+              </div>
+              <div style="color:var(--text-dim); white-space:pre; overflow-x:auto;">  {<span style="color:#7dd3fc">#</span> Logo and CTAs <span style="color:#7dd3fc">#</span>}
+  &lt;div class=<span style="color:#d4a84b">"hero-content"</span>&gt;
+    &lt;div class=<span style="color:#d4a84b">"hero-logo"</span> role=<span style="color:#d4a84b">"img"</span>&gt;
+
+      {<span style="color:#7dd3fc">#</span> Illustrated server-name wordmark. <span style="color:#7dd3fc">#</span>}
+      &lt;img class=<span style="color:#d4a84b">"hero-logo-art"</span> src=<span style="color:#d4a84b">"{{ </span><span style="color:#38bdf8">asset</span><span style="color:#d4a84b">('<u style="text-decoration-color:#fca5a5">ocean-realms-wordmark.png</u>') }}"</span>&gt;
+    &lt;/div&gt;</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="legend">
+          <div class="row"><span class="m">①</span><span>That underlined filename, <code>ocean-realms-wordmark.png</code>,
+          is the actual artwork — a plain image sitting in the theme's <code>assets/</code> folder.</span></div>
+        </div>
+
+        <div class="step" style="border-top:none; padding-top:20px;">
+          <div class="num">1</div>
+          <div><h3>Easiest: replace the file, keep the name</h3>
+          <p>In the <span class="crumb hit">Code</span> tab, open the <code>assets</code> folder, click
+          <code>ocean-realms-wordmark.png</code>, delete it, then use <b>Upload files</b> to upload your own artwork
+          <i>saved under that exact same filename</i>. The template's code doesn't change at all — it just picks up
+          the new picture.</p></div>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <div><h3>Or: point the code at a new file</h3>
+          <p>Upload your artwork under any filename (e.g. <code>my-server-logo.png</code>), open
+          <code>webstore/index.html</code>, and change <code>asset('ocean-realms-wordmark.png')</code> to
+          <code>asset('my-server-logo.png')</code> on that line, then click <b>Save file</b>.</p></div>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <div><h3>Sizing</h3>
+          <p>The original is a wide illustrated wordmark. Keep a similar aspect ratio (roughly 5:1, transparent
+          background) so it doesn't stretch or get cropped inside the banner.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="div">
+
+    <!-- 4. SECTIONS -->
+    <section class="block" id="sections">
+      <div class="block-head"><span class="idx">04</span><h2>Homepage sections</h2></div>
+      <p class="block-sub"><span class="crumb">Design</span><span class="sep">→</span><span class="crumb">Appearance</span><span class="sep">→</span><span class="crumb hit">Sections</span> — every block on your homepage below the hero banner has its own on/off switch. No section can be reordered here, but each can be shown, hidden, or given its own text.</p>
+
+      <div class="frame">
+        <div class="frame-bar"><span class="d"></span><span class="d"></span><span class="d"></span>
+          <span class="url">everfront.io/dashboard/your-store/design</span></div>
+        <div class="frame-body">
+          <div class="toggle-row"><span><b>Show Featured Packages</b> — spotlighted products on the homepage</span><span class="toggle"></span></div>
+          <div class="toggle-row"><span><b>Show Store Categories</b> — the category grid</span><span class="toggle"></span></div>
+          <div class="toggle-row"><span><b>Show Promotional Banner</b> — a sale/announcement strip with its own title, subtitle &amp; background image</span><span class="toggle"></span></div>
+          <div class="toggle-row"><span><b>Show Recent Payments</b> — live feed of recent purchases</span><span class="toggle"></span></div>
+          <div class="toggle-row"><span><b>Show Payment Goal</b> — monthly funding progress bar</span><span class="toggle"></span></div>
+          <div class="toggle-row"><span><b>Show Discord CTA</b> — join-Discord block with its own title &amp; description</span><span class="toggle"></span></div>
+          <div class="toggle-row"><span><b>Show FAQ</b> — the FAQ accordion</span><span class="toggle off"></span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">1</div>
+        <div><h3>Flip any switch to Yes / No</h3>
+        <p>Each row is independent — hide the FAQ if you don't have one yet, keep Featured Packages and Categories on,
+        and so on. The homepage reorders itself automatically; there's nothing else to configure for most of these.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div><h3>Fill in the sections that ask for text</h3>
+        <p><b>Promotional Banner</b> and <b>Discord CTA</b> unlock extra fields (title, subtitle/description, and for
+        the banner, an optional background image) once you switch them on — write your own sale message or Discord
+        pitch there.</p></div>
+      </div>
+    </section>
+
+    <hr class="div">
+
+    <!-- 5. FOOTER -->
+    <section class="block" id="footer">
+      <div class="block-head"><span class="idx">05</span><h2>Footer</h2></div>
+      <p class="block-sub"><span class="crumb">Design</span><span class="sep">→</span><span class="crumb">Appearance</span><span class="sep">→</span><span class="crumb hit">Footer</span> — the bar at the very bottom of every page: a second logo, socials and copyright text.</p>
+
+      <div class="field-grid" style="margin-top:18px;">
+        <div class="field"><label>Footer Logo</label><div class="box" style="color:var(--muted)">Upload an image</div>
+          <div class="hint">Can match the header logo, or be different</div></div>
+        <div class="field"><label>Footer Description</label><div class="box" style="color:var(--muted)">Short text…</div>
+          <div class="hint">A line or two under the footer logo</div></div>
+        <div class="field"><label>Footer Discord / Twitter / Instagram</label><div class="box" style="color:var(--muted)">URLs</div>
+          <div class="hint">Leave a field blank to hide that icon</div></div>
+        <div class="field"><label>Footer Copyright Text</label><div class="box" style="color:var(--muted)">© 2026 …</div>
+          <div class="hint">Legal line at the very bottom</div></div>
+      </div>
+
+      <div class="callout">
+        <div class="icon">🗒️</div>
+        <div class="body">Any social URL field left <b>empty</b> simply doesn't show that icon — you don't need to
+        delete anything, just leave it blank.</div>
+      </div>
+    </section>
+
+    <hr class="div">
+
+    <!-- 6. WIDGETS -->
+    <section class="block" id="widgets">
+      <div class="block-head"><span class="idx">06</span><h2>Sidebar widgets</h2></div>
+      <p class="block-sub"><span class="crumb">Design</span><span class="sep">→</span><span class="crumb hit">Widgets</span> — this is a different sub-tab from Appearance. It controls the vertical sidebar shown next to your product listings: drag to reorder, toggle to hide, or add a widget more than once.</p>
+
+      <div class="frame">
+        <div class="frame-bar"><span class="d"></span><span class="d"></span><span class="d"></span>
+          <span class="url">everfront.io/dashboard/your-store/design</span></div>
+        <div class="frame-body">
+          <div style="display:flex; justify-content:flex-end; margin-bottom:14px;">
+            <span class="btn" style="padding:7px 13px; font-size:12.5px;">+ Add widget</span>
+          </div>
+          <div class="widget-item"><span class="grip">⠿⠿</span>
+            <div class="info"><b>Welcome</b><span>Text box — your own announcement, rules or links</span></div></div>
+          <div class="widget-item"><span class="grip">⠿⠿</span>
+            <div class="info"><b>Recent payments</b><span>Latest purchases with player heads, names &amp; prices</span></div></div>
+          <div class="widget-item"><span class="grip">⠿⠿</span>
+            <div class="info"><b>Top donator</b><span>Highlights this month's top supporter</span></div></div>
+          <div class="widget-item"><span class="grip">⠿⠿</span>
+            <div class="info"><b>Donation goal</b><span>Progress bar toward your monthly goal</span></div></div>
+          <div class="widget-item"><span class="grip">⠿⠿</span>
+            <div class="info"><b>Server status</b><span>Live player count for your game server</span></div></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">1</div>
+        <div><h3>Reorder by dragging</h3>
+        <p>Click and hold the grip handle (⠿) on the left of any widget row, then drag it up or down. The sidebar on
+        the live store updates to match this order top-to-bottom.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div><h3>Hide a widget without deleting it</h3>
+        <p>Use the switch on the right of each row to turn a widget off temporarily — the trash icon next to it removes
+        it completely, which you can always undo with <b>Add widget</b>.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <div><h3>Write your own "Welcome" text</h3>
+        <p>Click the <b>Welcome</b> row to expand it — this is a free text box for server rules, announcements or
+        links, shown as plain text or simple HTML at the top of the sidebar.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
+        <div><h3>Add more widgets</h3>
+        <p>Click <b>+ Add widget</b> to bring in ones you haven't used yet (Community goal, Featured package, Gift card
+        balance...) — some only appear on the live site once there's real data behind them (e.g. Top donator needs at
+        least one payment).</p></div>
+      </div>
+    </section>
+
+    <hr class="div">
+
+    <!-- 7. PAGES -->
+    <section class="block" id="pages">
+      <div class="block-head"><span class="idx">07</span><h2>Page text</h2></div>
+      <p class="block-sub"><span class="crumb">Design</span><span class="sep">→</span><span class="crumb hit">Pages</span> — the written paragraphs on your homepage (and any custom page you add), edited like a simple document.</p>
+
+      <div class="step">
+        <div class="num">1</div>
+        <div><h3>Open the Home page</h3>
+        <p>Under <b>Pages</b>, click <b>Home page</b> — you'll see its address (<code>yourstore.everfront.store/</code>)
+        and a Content editor below it with headings like "Welcome", "How it works", "Get your name right".</p></div>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div><h3>Edit the text directly</h3>
+        <p>Click into any paragraph and type — this is a normal text editor, no code involved. Use it to explain what
+        purchases support, how long delivery takes, or anything specific to your server.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <div><h3>Add a new page</h3>
+        <p>Click <b>New page</b> to create additional pages (rules, a FAQ, a refund policy) — each gets its own title,
+        its own address, and the same simple text editor.</p></div>
+      </div>
+    </section>
+
+    <hr class="div">
+
+    <!-- 8. PUBLISH -->
+    <section class="block" id="publish">
+      <div class="block-head"><span class="idx">08</span><h2>Preview &amp; publish</h2></div>
+      <p class="block-sub">Everything above is saved as a <b>draft</b> automatically as you type. Your live store is
+      untouched until you explicitly publish.</p>
+
+      <div class="step">
+        <div class="num">1</div>
+        <div><h3>Check your draft</h3>
+        <p>Click <b>Preview draft</b> (bottom of the Design panel) to open your changes exactly as a customer would
+        see them — without affecting the live site.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div><h3>Publish when you're happy</h3>
+        <p>Once the preview looks right, use the publish action next to the "Live on v8 · published…" status line to
+        push your draft live. The timestamp updates to confirm it went through.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <div><h3>Changed your mind?</h3>
+        <p>Every field can simply be typed over again — there's no limit to how many times you republish, and nothing
+        here is destructive to your products, payments or Tebex setup.</p></div>
+      </div>
+
+      <div class="callout info">
+        <div class="icon">✅</div>
+        <div class="body"><b>Almost everything lives in these few screens.</b> Colors, header logo, hero text and
+        buttons, homepage sections, sidebar widgets, footer and page text are all no-code. The one exception is the
+        hero banner's illustrated wordmark artwork itself, which needs a quick trip to the <span class="crumb">Code</span>
+        tab — see <a href="#hero-logo-code">that box</a> above.</div>
+      </div>
+    </section>
+
+    <hr class="div">
+
+    <!-- FAQ -->
+    <section class="block" id="faq">
+      <div class="block-head"><span class="idx">FAQ</span><h2>Troubleshooting</h2></div>
+
+      <div class="step">
+        <div class="num">?</div>
+        <div><h3>I changed a color and part of the site still looks wrong.</h3>
+        <p>Make sure you're looking at <b>Preview draft</b>, not the live store — unpublished changes never show on
+        the public URL. If the preview itself looks off, check that Text Color still contrasts against your new
+        Background/Surface colors.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">?</div>
+        <div><h3>My logo looks blurry or squished.</h3>
+        <p>Re-upload it as a PNG close to 160×40px with a transparent background — very large or oddly-shaped images
+        get scaled down unevenly.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">?</div>
+        <div><h3>A widget isn't showing on the live store.</h3>
+        <p>A few widgets (Top donator, Community goal, Recent payments) only render once there's real Tebex data
+        behind them — they're not broken, they're just empty until a payment or goal exists.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">?</div>
+        <div><h3>I need something this panel doesn't cover.</h3>
+        <p>Structural changes — new page layouts, custom components, anything beyond colors/text/toggles — go through
+        the <span class="crumb">Code</span> tab instead, which is raw HTML/CSS and is best left to a developer.</p></div>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      Ocean Depths theme, running on Everfront. This guide covers the Design panel only — for deeper template
+      changes, see the Code tab.
+    </footer>
+  </main>
+</div>
